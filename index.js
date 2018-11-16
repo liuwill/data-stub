@@ -1,32 +1,54 @@
 'use strict'
 var colors = require('colors/safe')
+var path = require('path')
+var dbConfig = require(path.resolve('./app.json'))
+
 var dbConnector = require('./lib/connection')
 var orm = dbConnector.connect()
 
 var tableModule = require('./lib/table')
 var templateModule = require('./lib/template')
 
-function generate(cmdConfig, endCallback) {
+function generate(cmdConfig) {
   var tableName = cmdConfig.tableName
-  orm.query('desc ' + tableName).then(function(queryTable) {
-    var tableData = tableModule.buildTable(tableName, queryTable[0])
 
-    var templateData = templateModule.buildTemplate(tableData)
-    // var contentTypes = ['mapper', 'modal', 'xml']
+  return orm.query(`show create table ${tableName}`).then(created => {
+    const commentMap = created[0][0]['Create Table']
+      .split('\n')
+      .map(item => item.trim())
+      .filter(item => item.startsWith('`'))
+      .reduce((result, current) => {
+        const meta = current.match(/`([a-z\_]+)` .+ COMMENT '(.*)'/i)
+        if (meta && meta.length === 3) {
+          result[meta[1]] = meta[2]
+        }
+        return result
+      }, {})
 
-    var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.modal)
-    console.log('create file: ' + tableName)
-    console.log('============================\n')
-    console.log(fileContent)
-    endCallback(null)
-  }).catch(function (err) {
-    endCallback(err)
+    // console.log(commentMap)
+    return orm.query('desc ' + tableName).then(queryTable => {
+      var tableData = tableModule.buildTable(tableName, queryTable[0], commentMap)
+
+      var templateData = templateModule.buildTemplate(tableData, dbConfig.prefix)
+      // var contentTypes = ['mapper', 'modal', 'xml']
+
+      var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.modal)
+      var filename = templateData.fileName
+      console.log(`create file: ${tableName}[${filename}]`)
+      console.log('============================\n')
+      // console.log(fileContent)
+
+      return {
+        file: filename,
+        content: fileContent,
+      }
+    })
   })
 }
 
 function list(cmdConfig, endCallback) {
   var dbName = dbConnector.getDbName()
-  orm.query('show tables').then(function(queryTables) {
+  orm.query('show tables').then(function (queryTables) {
     console.log('show tables: ')
     console.log('============================\n')
 
