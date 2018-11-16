@@ -1,0 +1,8 @@
+node_modules
+.setting.vim
+docs
+dist
+.nyc_output
+coverage
+.env
+app.json

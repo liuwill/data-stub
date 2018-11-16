@@ -1,0 +1,14 @@
+var BaseModal = require('../modal')
+
+var modal = {
+  table: '{{ tableName }}',
+  fields: {
+{% for item in columns %}
+    '{{ item.field }}': {
+      type: {{ item.targetType }},
+      name: '{{ item.field }}',
+    },
+{% endfor %}
+  }
+}
+module.exports = new BaseModal(modal)
