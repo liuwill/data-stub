@@ -35,6 +35,7 @@ function showTable(tableName) {
       return {
         file: filename,
         table: tableName,
+        data: templateData,
         content: fileContent,
       }
     })
@@ -64,7 +65,16 @@ function generate(cmdConfig) {
       tablePromises.push(showTable(tableMeta.table))
     }
 
-    return Promise.all(tablePromises)
+    return Promise.all(tablePromises).then(generatedTables => {
+      return {
+        index: {
+          content: templateModule.render({
+            tableList: generatedTables,
+          }, templateModule.RENDER_TYPES.index)
+        },
+        tables: generatedTables,
+      }
+    })
   })
 }
 

@@ -16,7 +16,7 @@ try {
   var cmdConfig = commander.getCommandConfig()
   if (cmdConfig.function === 'generate') {
     const startTime = Date.now()
-    dbTools.generate(cmdConfig).then(generatedTables => {
+    dbTools.generate(cmdConfig).then(generatedData => {
       const outputPath = cmdConfig.outputPath
       const rootPath = path.resolve(outputPath)
       let basePromise = Promise.resolve(rootPath)
@@ -29,6 +29,7 @@ try {
         })
       }
 
+      const generatedTables = generatedData.tables
       return basePromise.then(createdDir => {
         const rootStats = fs.statSync(rootPath)
         if (!rootStats.isDirectory()) {
@@ -46,6 +47,8 @@ try {
           console.log(printLog.join(' '))
           fileUtils.saveGeneratedTemplate(rootPath, singleTable)
         }
+        fileUtils.saveModalIndex(rootPath, generatedData.index.content)
+        console.log('Create Index', colors.cyan(`${outputPath}/index.js`), colors.gray(`[${Date.now() - startTime}ms]`))
       })
     }).then(result => {
       const finishTime = Date.now()
