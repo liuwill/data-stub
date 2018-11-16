@@ -12,7 +12,7 @@ var templateModule = require('./lib/template')
 function generate(cmdConfig) {
   var tableName = cmdConfig.tableName
 
-  return orm.query(`show create table ${tableName}`).then(created => {
+  return orm.raw(`show create table ${tableName}`).then(created => {
     const commentMap = created[0][0]['Create Table']
       .split('\n')
       .map(item => item.trim())
@@ -26,7 +26,7 @@ function generate(cmdConfig) {
       }, {})
 
     // console.log(commentMap)
-    return orm.query('desc ' + tableName).then(queryTable => {
+    return orm.raw('desc ' + tableName).then(queryTable => {
       var tableData = tableModule.buildTable(tableName, queryTable[0], commentMap)
 
       var templateData = templateModule.buildTemplate(tableData, dbConfig.prefix)
@@ -48,7 +48,7 @@ function generate(cmdConfig) {
 
 function list(cmdConfig, endCallback) {
   var dbName = dbConnector.getDbName()
-  orm.query('show tables').then(function (queryTables) {
+  orm.raw('show tables').then(function (queryTables) {
     console.log('show tables: ')
     console.log('============================\n')
 
