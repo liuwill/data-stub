@@ -1,5 +1,4 @@
 'use strict'
-var colors = require('colors/safe')
 var path = require('path')
 var dbConfig = require(path.resolve('./app.json'))
 
@@ -9,9 +8,7 @@ var orm = dbConnector.connect()
 var tableModule = require('./lib/table')
 var templateModule = require('./lib/template')
 
-function generate(cmdConfig) {
-  var tableName = cmdConfig.tableName
-
+function showTable(tableName) {
   return orm.raw(`show create table ${tableName}`).then(created => {
     const commentMap = created[0][0]['Create Table']
       .split('\n')
@@ -44,7 +41,7 @@ function generate(cmdConfig) {
   })
 }
 
-function list(cmdConfig, endCallback) {
+function list(cmdConfig) {
   var dbName = dbConnector.getDbName()
   return orm.raw('show tables').then(function (queryTables) {
     const dbTables = []
@@ -60,7 +57,19 @@ function list(cmdConfig, endCallback) {
   })
 }
 
+function generate(cmdConfig) {
+  return list(cmdConfig).then(listData => {
+    const tablePromises = []
+    for (const tableMeta of listData) {
+      tablePromises.push(showTable(tableMeta.table))
+    }
+
+    return Promise.all(tablePromises)
+  })
+}
+
 module.exports = {
+  showTable: showTable,
   generate: generate,
   list: list,
 }

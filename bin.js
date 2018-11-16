@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 var commander = require('./lib/commander')
+var fileUtils = require('./lib/file')
 var dbTools = require('./')
 var fs = require('fs')
 var path = require('path')
+var mkdirp = require('mkdirp')
 var colors = require('colors/safe')
 
 if (!fs.existsSync(path.resolve('./app.json'))) {
@@ -12,13 +14,55 @@ if (!fs.existsSync(path.resolve('./app.json'))) {
 
 try {
   var cmdConfig = commander.getCommandConfig()
-  if (cmdConfig.function === 'table') {
-    dbTools.generate(cmdConfig).then(function(fileContent) {
+  if (cmdConfig.function === 'generate') {
+    const startTime = Date.now()
+    dbTools.generate(cmdConfig).then(generatedTables => {
+      const outputPath = cmdConfig.outputPath
+      const rootPath = path.resolve(outputPath)
+      let basePromise = Promise.resolve(rootPath)
+      if (!fs.existsSync(rootPath)) {
+        basePromise = new Promise((resolve, reject) => {
+          mkdirp(rootPath, function (err) {
+            if (err) { reject(err) }
+            else { resolve(rootPath) }
+          })
+        })
+      }
+
+      return basePromise.then(createdDir => {
+        const rootStats = fs.statSync(rootPath)
+        if (!rootStats.isDirectory()) {
+          return Promise.reject(new Error('目录不存在'))
+        }
+
+        for (let singleTable of generatedTables) {
+          const printLog = [
+            'Start Save: ',
+            colors.green(singleTable.table),
+            'to',
+            outputPath + '/' + colors.cyan(singleTable.file) + '.modal.js',
+            colors.gray(`[${Date.now() - startTime}ms]`)
+          ]
+          console.log(printLog.join(' '))
+          fileUtils.saveGeneratedTemplate(rootPath, singleTable)
+        }
+      })
+    }).then(result => {
+      const finishTime = Date.now()
+      console.log(colors.yellow('> Generate Finish AT'), colors.gray(`[${finishTime - startTime}ms]`))
+      process.exit(0)
+    }).catch(function (err) {
+      console.error(err)
+      process.exit(1)
+    })
+  } else if (cmdConfig.function === 'table') {
+    var tableName = cmdConfig.tableName
+    dbTools.showTable(tableName).then(function (fileContent) {
       console.log(`> create file: ${colors.green(fileContent.table)} [${colors.gray(fileContent.file)}]`)
       console.log('============================\n')
       console.log(fileContent.content)
       process.exit(0)
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.error(err)
       process.exit(1)
     })
