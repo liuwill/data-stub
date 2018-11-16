@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "8.12.0"
+services:
+  - mysql
+install:
+  - yarn install
+env:
+  - MYSQL_USER: travis
+  - MYSQL_DATABASE: ketchup
+  - MYSQL_HOST: localhost
+script:
+  - yarn run lint
+before_install:
+  - mysql -e 'CREATE DATABASE ketchup;'
