@@ -6,3 +6,5 @@ dist
 coverage
 .env
 app.json
+*.log
+package-lock.json
