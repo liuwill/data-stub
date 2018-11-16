@@ -2,6 +2,13 @@
 
 > Build data stub from database for programer
 
+## Installation:
+
+```shell
+yarn add data-stub
+npx data-stub -f ls
+```
+
 ## Configuration:
 set config at workdir with name: `app.json`
 
