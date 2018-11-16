@@ -1,9 +1,11 @@
 {
-  "host": "127.0.0.1",
-  "user": "ketchup",
-  "password": "123456",
-  "database": "ketchup",
-  "port": 3306,
-  "charset": "utf8",
+  "mysql": {
+    "host": "127.0.0.1",
+    "user": "ketchup",
+    "password": "123456",
+    "database": "ketchup",
+    "port": 3306,
+    "charset": "utf8"
+  },
   "prefix": "tb"
 }

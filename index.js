@@ -34,12 +34,10 @@ function generate(cmdConfig) {
 
       var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.modal)
       var filename = templateData.fileName
-      console.log(`create file: ${tableName}[${filename}]`)
-      console.log('============================\n')
-      // console.log(fileContent)
 
       return {
         file: filename,
+        table: tableName,
         content: fileContent,
       }
     })
@@ -48,18 +46,17 @@ function generate(cmdConfig) {
 
 function list(cmdConfig, endCallback) {
   var dbName = dbConnector.getDbName()
-  orm.raw('show tables').then(function (queryTables) {
-    console.log('show tables: ')
-    console.log('============================\n')
-
+  return orm.raw('show tables').then(function (queryTables) {
+    const dbTables = []
     for (var i in queryTables[0]) {
       var line = queryTables[0][i]
       var generateSyntax = 'node bin.js -t ' + line['Tables_in_' + dbName] + ' -p'
-      console.log(colors.green(line['Tables_in_' + dbName]), '[ ' + colors.yellow(generateSyntax) + ' ]')
+      dbTables.push({
+        table: line['Tables_in_' + dbName],
+        command: generateSyntax,
+      })
     }
-    endCallback(null)
-  }).catch(function (err) {
-    endCallback(err)
+    return dbTables
   })
 }
 

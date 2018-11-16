@@ -14,20 +14,27 @@ try {
   var cmdConfig = commander.getCommandConfig()
   if (cmdConfig.function === 'table') {
     dbTools.generate(cmdConfig).then(function(fileContent) {
-      console.log(fileContent)
+      console.log(`> create file: ${colors.green(fileContent.table)} [${colors.gray(fileContent.file)}]`)
+      console.log('============================\n')
+      console.log(fileContent.content)
       process.exit(0)
     }).catch(function(err) {
       console.error(err)
       process.exit(1)
     })
   } else if (cmdConfig.function === 'ls') {
-    dbTools.list(cmdConfig, function (err) {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      } else {
-        process.exit(0)
+    dbTools.list(cmdConfig).then(listData => {
+      console.log('> show tables: ')
+      console.log('> ============================\n')
+
+      for (let tableData of listData) {
+        console.log('  ', colors.green(tableData.table), '[ ' + colors.yellow(tableData.command) + ' ]')
       }
+      console.log('')
+      process.exit(0)
+    }).catch(err => {
+      console.error(err)
+      process.exit(1)
     })
   } else {
     console.log('命令不存在')
