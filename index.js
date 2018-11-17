@@ -1,12 +1,16 @@
 'use strict'
-var path = require('path')
-var dbConfig = require(path.resolve('./app.json'))
-
-var dbConnector = require('./lib/connection')
-var orm = dbConnector.connect()
+var appConfig = null
 
 var tableModule = require('./lib/table')
 var templateModule = require('./lib/template')
+
+var dbConnector = require('./lib/connection')
+var orm = null
+
+function init (config) {
+  appConfig = config
+  orm = dbConnector.connect(appConfig)
+}
 
 function showTable(tableName) {
   return orm.raw(`show create table ${tableName}`).then(created => {
@@ -26,7 +30,7 @@ function showTable(tableName) {
     return orm.raw('desc ' + tableName).then(queryTable => {
       var tableData = tableModule.buildTable(tableName, queryTable[0], commentMap)
 
-      var templateData = templateModule.buildTemplate(tableData, dbConfig.prefix)
+      var templateData = templateModule.buildTemplate(tableData, appConfig.prefix)
       // var contentTypes = ['mapper', 'modal', 'xml']
 
       var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.modal)
@@ -82,4 +86,5 @@ module.exports = {
   showTable: showTable,
   generate: generate,
   list: list,
+  init,
 }

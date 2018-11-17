@@ -7,13 +7,18 @@ var path = require('path')
 var mkdirp = require('mkdirp')
 var colors = require('colors/safe')
 
-if (!fs.existsSync(path.resolve('./app.json'))) {
-  console.log(colors.red('Error! app.json Config is Missing!'))
-  process.exit(1)
-}
-
 try {
   var cmdConfig = commander.getCommandConfig()
+
+  var configPath = path.resolve(cmdConfig.configPath)
+  if (!fs.existsSync(configPath)) {
+    console.log(colors.red('Error! app.json Config is Missing!'))
+    process.exit(1)
+  }
+
+  const dbConfig = require(configPath)
+  dbTools.init(dbConfig)
+
   if (cmdConfig.function === 'generate') {
     const startTime = Date.now()
     dbTools.generate(cmdConfig).then(generatedData => {
