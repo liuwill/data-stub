@@ -14,9 +14,9 @@ function init (config) {
 
 function showTable(tableName) {
   return orm.raw(`show create table ${tableName}`).then(created => {
-    const commentMap = created[0][0]['Create Table']
-      .split('\n')
-      .map(item => item.trim())
+    const createSql = created[0][0]['Create Table']
+    const createLines = createSql.split('\n').map(item => item.trim())
+    const commentMap = createLines
       .filter(item => item.startsWith('`'))
       .reduce((result, current) => {
         const meta = current.match(/`([a-z\_]+)` .+ COMMENT '(.*)'/i)
@@ -25,19 +25,23 @@ function showTable(tableName) {
         }
         return result
       }, {})
+    let tableComment = ''
+    const tableMatch = createLines.slice(-1)[0].match(/COMMENT='(.+)'/i)
+    if (tableMatch && tableMatch.length) {
+      tableComment = tableMatch[1]
+    }
 
-    // console.log(commentMap)
     return orm.raw('desc ' + tableName).then(queryTable => {
-      var tableData = tableModule.buildTable(tableName, queryTable[0], commentMap)
+      var tableData = tableModule.buildTable(tableName, queryTable[0], tableComment, commentMap)
 
       var templateData = templateModule.buildTemplate(tableData, appConfig.prefix)
-      // var contentTypes = ['mapper', 'modal', 'xml']
 
       var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.modal)
       var filename = templateData.fileName
 
       return {
         file: filename,
+        comment: tableComment,
         table: tableName,
         data: templateData,
         content: fileContent,
