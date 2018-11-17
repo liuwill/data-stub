@@ -36,7 +36,7 @@ function showTable(tableName) {
 
       var templateData = templateModule.buildTemplate(tableData, appConfig.prefix)
 
-      var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.modal)
+      var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.model)
       var filename = templateData.fileName
 
       return {
