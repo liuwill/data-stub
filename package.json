@@ -1,6 +1,6 @@
 {
   "name": "data-stub",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "generate mysql database stub",
   "main": "index.js",
   "bin": {
