@@ -1,4 +1,5 @@
 # DATA STUB
+[![NPM version][npm-image]][npm-url]
 
 > Build data stub from database for programer
 
@@ -55,3 +56,11 @@ var modal = {
 module.exports = new BaseModal(modal)
 
 ```
+
+## License
+
+  [MIT](./LICENSE)
+
+
+[npm-image]: https://img.shields.io/npm/v/data-stub.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/data-stub
