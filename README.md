@@ -1,5 +1,6 @@
 # DATA STUB
 [![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
 
 > Build data stub from database for programer
 
@@ -64,3 +65,5 @@ module.exports = new BaseModel(model)
 
 [npm-image]: https://img.shields.io/npm/v/data-stub.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/data-stub
+[travis-image]: https://travis-ci.org/liuwill/data-stub.svg?branch=master
+[travis-url]: https://travis-ci.org/liuwill/data-stub

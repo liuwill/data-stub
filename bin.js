@@ -47,7 +47,7 @@ try {
             colors.green(singleTable.table),
             'to',
             outputPath + '/' + colors.cyan(singleTable.file) + '.model.js',
-            colors.gray(`[${Date.now() - startTime}ms]`)
+            colors.gray(`[${Date.now() - startTime}ms]`),
           ]
           console.log(printLog.join(' '))
           fileUtils.saveGeneratedTemplate(rootPath, singleTable)

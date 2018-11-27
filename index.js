@@ -7,7 +7,7 @@ var templateModule = require('./lib/template')
 var dbConnector = require('./lib/connection')
 var orm = null
 
-function init (config) {
+function init(config) {
   appConfig = config
   orm = dbConnector.connect(appConfig)
 }
@@ -78,7 +78,7 @@ function generate(cmdConfig) {
         index: {
           content: templateModule.render({
             tableList: generatedTables,
-          }, templateModule.RENDER_TYPES.index)
+          }, templateModule.RENDER_TYPES.index),
         },
         tables: generatedTables,
       }

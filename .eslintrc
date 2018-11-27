@@ -22,7 +22,7 @@
     "no-shadow-restricted-names": 2,
     "no-unexpected-multiline": 2,
     "no-use-before-define": [1, "nofunc"],
-    "comma-dangle": [ 1, "only-multiline" ],
+    "comma-dangle": [ 1, "always-multiline" ],
     "no-undef": 2,
     "no-else-return": 1,
     "no-cond-assign": 2,
@@ -62,7 +62,8 @@
     "comma-style": [1, "last"],
     "block-spacing": [1, "always"],
     "object-curly-spacing": [1, "always"],
-    "array-bracket-spacing": [1, "never"]
+    "array-bracket-spacing": [1, "never"],
+    "space-before-function-paren": ["error", { "anonymous": "always", "named": "never" }]
   }
 }
 
