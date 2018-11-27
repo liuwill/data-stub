@@ -11,5 +11,6 @@ env:
   - MYSQL_HOST: localhost
 script:
   - yarn run lint
+  - yarn run coverage
 before_install:
   - mysql -e 'CREATE DATABASE ketchup;'
