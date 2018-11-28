@@ -1,6 +1,7 @@
 # DATA STUB
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
+[![codecov][codecov-image]][codecov-url]
 
 > Build data stub from database for programer
 
@@ -67,3 +68,5 @@ module.exports = new BaseModel(model)
 [npm-url]: https://npmjs.org/package/data-stub
 [travis-image]: https://travis-ci.org/liuwill/data-stub.svg?branch=master
 [travis-url]: https://travis-ci.org/liuwill/data-stub
+[codecov-image]: https://codecov.io/gh/liuwill/data-stub/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/liuwill/data-stub

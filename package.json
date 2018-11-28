@@ -14,6 +14,7 @@
     "test": "mocha --opts test/mocha.opts",
     "coverage": "nyc mocha --opts test/mocha.opts",
     "report": "nyc --reporter=html --reporter=text mocha --opts test/mocha.opts",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS"
   },
   "dependencies": {
