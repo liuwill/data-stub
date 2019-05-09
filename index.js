@@ -13,7 +13,7 @@ function init(config) {
 }
 
 function showTable(tableName) {
-  return orm.raw(`show create table ${tableName}`).then(created => {
+  return orm.raw(`show create table \`${tableName}\``).then(created => {
     const createSql = created[0][0]['Create Table']
     const createLines = createSql.split('\n').map(item => item.trim())
     const commentMap = createLines
@@ -31,7 +31,7 @@ function showTable(tableName) {
       tableComment = tableMatch[1]
     }
 
-    return orm.raw('desc ' + tableName).then(queryTable => {
+    return orm.raw('desc `' + tableName + '`').then(queryTable => {
       var tableData = tableModule.buildTable(tableName, queryTable[0], tableComment, commentMap)
 
       var templateData = templateModule.buildTemplate(tableData, appConfig.prefix)
