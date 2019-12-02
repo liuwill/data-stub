@@ -18,20 +18,20 @@
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS"
   },
   "dependencies": {
-    "colors": "^1.3.2",
-    "ejs": "^2.6.1",
-    "knex": "^0.15.2",
+    "colors": "^1.4.0",
+    "ejs": "^3.0.1",
+    "knex": "^0.20.3",
     "mkdirp": "^0.5.1",
-    "mysql": "^2.16.0",
+    "mysql": "^2.17.1",
     "simple-camelcase": "^0.1.2",
-    "yargs": "^12.0.2"
+    "yargs": "^15.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^5.7.0",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
-    "sinon": "^7.1.0"
+    "eslint": "^6.7.2",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
+    "sinon": "^7.5.0"
   },
   "engines": {
     "node": ">=8"
