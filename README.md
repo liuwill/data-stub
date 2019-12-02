@@ -27,7 +27,10 @@ set config at workdir with name: `app.json`
     "port": 3306,
     "charset": "utf8"
   },
-  "prefix": "tb"
+  "prefix": "tb",
+  "data-stub": {
+    "exclude": ["tb_name"]
+  }
 }
 ```
 
