@@ -21,7 +21,7 @@ try {
 
   if (cmdConfig.function === 'generate') {
     const startTime = Date.now()
-    dbTools.generate(cmdConfig).then(generatedData => {
+    dbTools.generate(cmdConfig, dbConfig).then(generatedData => {
       const outputPath = cmdConfig.outputPath
       const rootPath = path.resolve(outputPath)
       let basePromise = Promise.resolve(rootPath)

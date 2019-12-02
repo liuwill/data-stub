@@ -7,5 +7,8 @@
     "port": 3306,
     "charset": "utf8"
   },
-  "prefix": "tb"
+  "prefix": "tb",
+  "data-stub": {
+    "exclude": ["tb_exclude_table"]
+  }
 }

@@ -66,10 +66,20 @@ function list(cmdConfig) {
   })
 }
 
-function generate(cmdConfig) {
+function generate(cmdConfig, appConfig) {
+  let excludeTables = []
+  if (appConfig
+    && appConfig['data-stub']
+    && appConfig['data-stub']['exclude']
+    && appConfig['data-stub']['exclude'] instanceof Array) {
+    excludeTables = excludeTables.concat(appConfig['data-stub']['exclude'])
+  }
   return list(cmdConfig).then(listData => {
     const tablePromises = []
     for (const tableMeta of listData) {
+      if (excludeTables.includes(tableMeta.table)) {
+        continue
+      }
       tablePromises.push(showTable(tableMeta.table))
     }
 
