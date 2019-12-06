@@ -62,6 +62,24 @@ var model = {
 }
 module.exports = new BaseModel(model)
 
+## Usage
+
+```shell
+Usage: bin.js -t <table> -o <output> -p <print> -f <functionName> -c
+<configPath>
+
+选项：
+  --version       显示版本号                                              [布尔]
+  --table, -t     要生成的数据表                                    [默认值: ""]
+  --print, -p     是否打印                                   [默认值: "console"]
+  --function, -f  执行的功能[generate, ls, table]              [默认值: "table"]
+  --config, -c    配置文件的位置                            [默认值: "app.json"]
+  --output, -o    输出目录                                      [默认值: "dist"]
+  --language, -l  输出语言
+                     [可选值: "javascript", "typescript"] [默认值: "javascript"]
+  --help          显示帮助信息                                            [布尔]
+```
+
 ```
 
 ## License
