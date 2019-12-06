@@ -12,7 +12,7 @@ function init(config) {
   orm = dbConnector.connect(appConfig)
 }
 
-function showTable(tableName) {
+function showTable(tableName, lang) {
   return orm.raw(`show create table \`${tableName}\``).then(created => {
     const createSql = created[0][0]['Create Table']
     const createLines = createSql.split('\n').map(item => item.trim())
@@ -36,7 +36,7 @@ function showTable(tableName) {
 
       var templateData = templateModule.buildTemplate(tableData, appConfig.prefix)
 
-      var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.model)
+      var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.model, lang)
       var filename = templateData.fileName
 
       return {
@@ -80,15 +80,19 @@ function generate(cmdConfig, appConfig) {
       if (excludeTables.includes(tableMeta.table)) {
         continue
       }
-      tablePromises.push(showTable(tableMeta.table))
+      tablePromises.push(showTable(tableMeta.table, cmdConfig.language))
     }
 
     return Promise.all(tablePromises).then(generatedTables => {
       return {
         index: {
-          content: templateModule.render({
-            tableList: generatedTables,
-          }, templateModule.RENDER_TYPES.index),
+          content: templateModule.render(
+            {
+              tableList: generatedTables,
+            },
+            templateModule.RENDER_TYPES.index,
+            cmdConfig.language
+          ),
         },
         tables: generatedTables,
       }

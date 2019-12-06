@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var commander = require('./lib/commander')
 var fileUtils = require('./lib/file')
+var config = require('./lib/config')
 var dbTools = require('./')
 var fs = require('fs')
 var path = require('path')
@@ -19,6 +20,7 @@ try {
   const dbConfig = require(configPath)
   dbTools.init(dbConfig)
 
+  const langData = config['language'][cmdConfig.language]
   if (cmdConfig.function === 'generate') {
     const startTime = Date.now()
     dbTools.generate(cmdConfig, dbConfig).then(generatedData => {
@@ -46,14 +48,14 @@ try {
             'Start Save: ',
             colors.green(singleTable.table),
             'to',
-            outputPath + '/' + colors.cyan(singleTable.file) + '.model.js',
+            outputPath + '/' + colors.cyan(singleTable.file) + '.model.' + langData.extend,
             colors.gray(`[${Date.now() - startTime}ms]`),
           ]
           console.log(printLog.join(' '))
-          fileUtils.saveGeneratedTemplate(rootPath, singleTable)
+          fileUtils.saveGeneratedTemplate(rootPath, singleTable, langData)
         }
-        fileUtils.saveModalIndex(rootPath, generatedData.index.content)
-        console.log('Create Index', colors.cyan(`${outputPath}/index.js`), colors.gray(`[${Date.now() - startTime}ms]`))
+        fileUtils.saveModalIndex(rootPath, generatedData.index.content, langData)
+        console.log('Create Index', colors.cyan(`${outputPath}/index.${langData['extend']}`), colors.gray(`[${Date.now() - startTime}ms]`))
       })
     }).then(result => {
       const finishTime = Date.now()
@@ -65,7 +67,8 @@ try {
     })
   } else if (cmdConfig.function === 'table') {
     var tableName = cmdConfig.tableName
-    dbTools.showTable(tableName).then(function (fileContent) {
+    var language = cmdConfig.language
+    dbTools.showTable(tableName, language).then(function (fileContent) {
       console.log(`> create file: ${colors.green(fileContent.table)} [${colors.gray(fileContent.file)}]`)
       console.log('============================\n')
       console.log(fileContent.content)
