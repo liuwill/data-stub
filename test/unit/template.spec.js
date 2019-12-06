@@ -10,6 +10,7 @@ var sampleTable = require('../sample/sample_table')
 
 var tableModule = require('../../lib/table')
 var templateModule = require('../../lib/template')
+var config = require('../../lib/config')
 var Table = tableModule.Table
 
 describe('#template module', function () {
@@ -37,6 +38,20 @@ describe('#template module', function () {
   describe('#render templates', function () {
     it('will render proper template', function () {
       var modalContent = templateModule.render(tplObj, templateModule.RENDER_TYPES.model)
+      expect(modalContent).to.have.string(`table: '${ tplObj.tableName }',`)
+
+      for (var i in tplObj.columns) {
+        var item = tplObj.columns[i]
+        expect(modalContent).to.have.string(`'${item.field}': {`)
+      }
+    })
+
+    it('will render typescript template', function () {
+      var modalContent = templateModule.render(
+        tplObj,
+        templateModule.RENDER_TYPES.model,
+        config.support.TYPESCRIPT
+      )
       expect(modalContent).to.have.string(`table: '${ tplObj.tableName }',`)
 
       for (var i in tplObj.columns) {
