@@ -8,3 +8,5 @@ coverage
 app.json
 *.log
 package-lock.json
+
+/**/.gitignore
