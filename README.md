@@ -80,8 +80,6 @@ Usage: bin.js -t <table> -o <output> -p <print> -f <functionName> -c
   --help          显示帮助信息                                            [布尔]
 ```
 
-```
-
 ## License
 
   [MIT](./LICENSE)
