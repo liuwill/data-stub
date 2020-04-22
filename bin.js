@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var commander = require('./lib/commander')
 var fileUtils = require('./lib/file')
+var templateModule = require('./lib/template')
 var config = require('./lib/config')
 var dbTools = require('./')
 var fs = require('fs')
@@ -55,6 +56,16 @@ try {
           fileUtils.saveGeneratedTemplate(rootPath, singleTable, langData)
         }
         fileUtils.saveModalIndex(rootPath, generatedData.index.content, langData)
+        if (langData['define'] === true) {
+          const defineContent = templateModule.render(
+            {
+              tableList: generatedTables,
+            },
+            templateModule.RENDER_TYPES.define,
+            cmdConfig.language
+          )
+          fileUtils.saveModalDefine(rootPath, defineContent, langData)
+        }
         console.log('Create Index', colors.cyan(`${outputPath}/index.${langData['extend']}`), colors.gray(`[${Date.now() - startTime}ms]`))
       })
     }).then(result => {

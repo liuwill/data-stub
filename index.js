@@ -38,9 +38,11 @@ function showTable(tableName, lang) {
 
       var fileContent = templateModule.render(templateData, templateModule.RENDER_TYPES.model, lang)
       var filename = templateData.fileName
+      let className = templateData.baseClassName
 
       return {
         file: filename,
+        className: className,
         comment: tableComment,
         table: tableName,
         data: templateData,
